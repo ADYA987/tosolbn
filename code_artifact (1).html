@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="mn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моск — Монголын өсвөрийн сэтгүүлчдийн клуб</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS for modern layout structure -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pastelBlue: '#9ECAD6',
+                        mutedIndigo: '#748DAE',
+                        blushPink: '#F5CBCB',
+                        lightRose: '#FFEAEA',
+                        darkSlate: '#1E293B',
+                        softGray: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none; /* Custom cursor */
+            overflow-x: hidden;
+        }
+
+        /* Abstract Gradient Backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #FFEAEA 0%, #FFEAEA 20%, #F5CBCB 40%, #9ECAD6 75%, #748DAE 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #111827 0%, #1E293B 40%, #0F172A 70%, #1e1b4b 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        /* Abstract Blob Elements */
+        .blob-1 {
+            border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+            filter: blur(80px);
+            opacity: 0.55;
+            background: linear-gradient(to right, #9ECAD6, #F5CBCB);
+        }
+        .blob-2 {
+            border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
+            filter: blur(100px);
+            opacity: 0.5;
+            background: linear-gradient(to right, #FFEAEA, #748DAE);
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            width: 12px;
+            height: 12px;
+            background-color: #748DAE;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        #custom-cursor-ring {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(116, 141, 174, 0.4);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.1s ease-out, width 0.2s, height 0.2s;
+        }
+
+        /* Hide cursors on mobile touch screens */
+        @media (pointer: coarse) {
+            #custom-cursor, #custom-cursor-ring {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* Hovering State on interactive elements */
+        .hoverable:hover ~ #custom-cursor {
+            width: 24px;
+            height: 24px;
+            background-color: #F5CBCB;
+            mix-blend-mode: difference;
+        }
+        .hoverable:hover ~ #custom-cursor-ring {
+            width: 48px;
+            height: 48px;
+            border-color: #9ECAD6;
+        }
+
+        /* Smooth page transition crossfade */
+        .page-view {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .page-hidden {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        .page-visible {
+            display: block !important;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Animation helpers */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            visibility: hidden;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+            visibility: visible;
+        }
+
+        /* Lightbox styles */
+        .lightbox-active {
+            overflow: hidden;
+        }
+
+        /* Floating Back-to-Top Button */
+        #back-to-top {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Custom Cursor Nodes -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-ring"></div>
+
+    <!-- Background decorative abstract blobs -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div class="absolute blob-1 w-[400px] h-[400px] -top-20 -left-20"></div>
+        <div class="absolute blob-2 w-[500px] h-[500px] bottom-10 right-[-100px]"></div>
+    </div>
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-slate-900 text-slate-200 py-2 px-4 text-xs font-medium z-50 relative flex justify-between items-center">
+        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+            <span class="bg-blushPink text-darkSlate px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider animate-pulse">ЗАР</span>
+            <div id="ticker" class="inline-block">
+                📝 Зуны Өсвөрийн Сэтгүүлчдийн Сурвалжлах Хөтөлбөр 2026 албан ёсоор нээгдлээ! Одоо бүртгүүлнэ үү.
+            </div>
+        </div>
+        <div class="hidden sm:flex items-center gap-4 text-slate-400">
+            <span id="current-date-time"><i class="fa-regular fa-clock mr-1"></i> Улаанбаатар, Монгол</span>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER NAV -->
+    <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="#" onclick="navigateTo('home'); return false;" class="hoverable flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-pastelBlue to-mutedIndigo flex items-center justify-center text-white font-extrabold text-xl shadow-md transition-transform duration-300 group-hover:rotate-6">
+                    М
+                </div>
+                <div>
+                    <span class="font-serif text-2xl font-extrabold tracking-tight block text-slate-900 dark:text-white leading-none">Моск</span>
+                    <span class="text-[10px] font-semibold text-mutedIndigo dark:text-pastelBlue tracking-[0.2em] uppercase">Өсвөрийн Сэтгүүлчид</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Menu -->
+            <nav class="hidden xl:flex items-center gap-1">
+                <a href="#" onclick="navigateTo('home'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Нүүр</a>
+                <a href="#" onclick="navigateTo('magazine'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Хэвлэмэл сэтгүүл</a>
+                <a href="#" onclick="navigateTo('voices'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Блог</a>
+                <a href="#" onclick="navigateTo('editor'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-slate-700"><i class="fa-solid fa-pen-nib mr-1.5 animate-bounce"></i>Нийтлэл бичих</a>
+                <a href="#" onclick="navigateTo('gallery'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Цомог</a>
+                <a href="#" onclick="navigateTo('about'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Клубийн тухай</a>
+                <a href="#" onclick="navigateTo('resources'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Гарын авлага</a>
+                <a href="#" onclick="navigateTo('podcast'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Подкаст</a>
+                <a href="#" onclick="navigateTo('faq'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">ТАХ</a>
+                <a href="#" onclick="navigateTo('contact'); return false;" class="nav-link px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-mutedIndigo dark:hover:text-pastelBlue transition-colors rounded-lg">Холбоо барих</a>
+            </nav>
+
+            <!-- Quick Action Actions -->
+            <div class="flex items-center gap-3">
+                
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" class="hoverable p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" aria-label="Харагдах байдал солих">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+
+                <!-- CTA Join Button (Desktop) -->
+                <button onclick="navigateTo('join')" class="hoverable hidden md:inline-flex items-center justify-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-mutedIndigo to-pastelBlue rounded-xl hover:shadow-lg transition-all duration-300 active:scale-95">
+                    Элсэх хүсэлт
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="xl:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" aria-label="Цэс нээх">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Fullscreen Dropdown Menu -->
+        <div id="mobile-menu" class="hidden xl:hidden fixed top-20 left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 max-h-[calc(100vh-5rem)] overflow-y-auto transition-all duration-300 shadow-xl z-50">
+            <div class="px-4 py-6 space-y-3">
+                <a href="#" onclick="navigateTo('home'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Нүүр хуудас</a>
+                <a href="#" onclick="navigateTo('magazine'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Хэвлэмэл сэтгүүл</a>
+                <a href="#" onclick="navigateTo('voices'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Өсвөр үеийн блог</a>
+                <a href="#" onclick="navigateTo('editor'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-slate-800 rounded-xl"><i class="fa-solid fa-pen-nib mr-2"></i>Нийтлэл бичих (ШИНЭ)</a>
+                <a href="#" onclick="navigateTo('gallery'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Зургийн цомог</a>
+                <a href="#" onclick="navigateTo('about'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Клубийн тухай</a>
+                <a href="#" onclick="navigateTo('join'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-mutedIndigo dark:text-pastelBlue">Клубт элсэх</a>
+                <a href="#" onclick="navigateTo('resources'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Гарын авлага</a>
+                <a href="#" onclick="navigateTo('podcast'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Подкаст</a>
+                <a href="#" onclick="navigateTo('faq'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">ТАХ</a>
+                <a href="#" onclick="navigateTo('contact'); toggleMobileMenu(); return false;" class="block px-4 py-3 text-lg font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Холбоо барих</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="flex-grow z-10 relative">
+
+        <!-- ================= PAGE 1: HOME ================= -->
+        <section id="page-home" class="page-view page-visible py-8 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Hero Section: Abstract & Gradient -->
+                <div class="relative rounded-3xl p-8 md:p-16 overflow-hidden gradient-bg shadow-2xl mb-12 border border-white/20">
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/40 text-slate-900 rounded-full text-xs font-bold uppercase tracking-wider mb-6">Залуусын дуу хоолойг түүчээлнэ</span>
+                        <h1 class="font-serif text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                            Монголын Өсвөр Насныхан Үнэний Ирээдүйг Зурна.
+                        </h1>
+                        <p class="text-base md:text-lg text-slate-800/90 mb-8 leading-relaxed font-medium">
+                            "Моск" бол Улаанбаатар дахь өсвөр насныхны өөрсдөө удирдан явуулдаг хэвлэл мэдээллийн нэгдэл юм. Бид байгаль орчин, соёлын өв, боловсролын тэгш эрх болон технологийн хувьслыг үнэн бодитоор мэдээлдэг.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="navigateTo('magazine')" class="hoverable bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-md active:scale-95">
+                                Хэвлэмэл сэтгүүл унших
+                            </button>
+                            <button onclick="navigateTo('voices')" class="hoverable bg-white/50 backdrop-blur-sm border border-slate-950/20 text-slate-900 px-6 py-3 rounded-xl font-bold hover:bg-white/80 transition-all">
+                                Блог нийтлэлүүд
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editorial Board Picks / Breaking News Cards -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+                    <div class="lg:col-span-2">
+                        <h2 class="font-serif text-3xl font-bold mb-6 flex items-center gap-3">
+                            <span class="w-1.5 h-8 bg-mutedIndigo rounded-full"></span> Онцлох сэдэв & Нийтлэлүүд
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="home-featured-stories">
+                            <!-- Dynamic featured stories inserted on load -->
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Feed -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-lg h-fit">
+                        <h3 class="font-serif text-2xl font-bold mb-6 text-slate-950 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
+                            Зарлалын самбар
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-blushPink pl-4">
+                                <span class="text-xs font-bold text-mutedIndigo dark:text-pastelBlue block mb-1">УДАХГҮЙ БОЛОХ СУРГАЛТ</span>
+                                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Эрэн сурвалжлах сэтгүүл зүйн анхны алхам</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Хагас сайн өдөр Клубын төв байранд зохиогдох бодит баримт нягтлах практик сургалтанд нэгдээрэй.</p>
+                            </div>
+                            <div class="border-l-4 border-pastelBlue pl-4">
+                                <span class="text-xs font-bold text-mutedIndigo dark:text-pastelBlue block mb-1">БИДНИЙ АМЖИЛТ</span>
+                                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">"Моск" клуб Үндэсний хэвлэл мэдээллийн шагнал хүртлээ</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Гэр хорооллын бичил дэд бүтцийн талаар цуврал сурвалжилга бэлтгэж, шилдэг залуу медиа шагнал хүртэв.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-3">Мэдээлэл хүлээн авах</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Өсвөр үеийнхний бэлтгэсэн шилдэг нийтлэлүүдийг долоо хоног бүр и-мэйлээрээ аваарай.</p>
+                            <form id="home-newsletter" class="space-y-2">
+                                <input type="email" placeholder="И-мэйл хаяг" required class="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-mutedIndigo">
+                                <button type="submit" class="w-full bg-slate-900 text-white text-xs py-2 rounded-lg font-bold hover:bg-slate-800 transition-colors">Бүртгүүлэх</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live stats counter section -->
+                <div class="fade-in-section grid grid-cols-2 md:grid-cols-4 gap-4 p-8 bg-gradient-to-br from-lightRose to-blushPink/40 dark:from-slate-900 dark:to-slate-800/40 rounded-2xl border border-slate-200/50 dark:border-slate-800 mb-16">
+                    <div class="text-center">
+                        <span class="block text-4xl font-extrabold text-slate-900 dark:text-white">150+</span>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue mt-1">Идэвхтэй гишүүн</span>
+                    </div>
+                    <div class="text-center border-l border-slate-300/40">
+                        <span class="block text-4xl font-extrabold text-slate-900 dark:text-white">12k+</span>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue mt-1">Сар тутмын уншигч</span>
+                    </div>
+                    <div class="text-center border-l border-slate-300/40">
+                        <span class="block text-4xl font-extrabold text-slate-900 dark:text-white">40+</span>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue mt-1">Хэвлэгдсэн дугаар</span>
+                    </div>
+                    <div class="text-center border-l border-slate-300/40">
+                        <span class="block text-4xl font-extrabold text-slate-900 dark:text-white">21</span>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue mt-1">Хүрсэн аймаг</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: FEATURED MAGAZINE ================= -->
+        <section id="page-magazine" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Улирал тутмын хэвлэмэл дугаар</span>
+                    <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-slate-950 dark:text-white">
+                        "МОСК" сэтгүүлийн дугаарууд
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 mt-3 max-w-xl mx-auto">
+                        Дунд болон ахлах ангийн сурагчдын өөрсдөө бэлтгэн хэвлүүлсэн сэтгүүлийг онлайнаар эргүүлэн уншаарай.
+                    </p>
+                </div>
+
+                <!-- Digital Magazine Feature Container (Emulated Interactive E-Reader) -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-10 border border-slate-100 dark:border-slate-800 shadow-2xl mb-12">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                        <!-- Magazine Cover Rendering -->
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 aspect-[3/4] max-w-[340px] mx-auto bg-gradient-to-tr from-lightRose via-blushPink to-pastelBlue p-6 flex flex-col justify-between text-slate-900">
+                            <div class="flex justify-between items-start">
+                                <span class="font-bold text-xs uppercase tracking-widest text-slate-800">Зуны дугаар 2026</span>
+                                <span class="text-[10px] font-extrabold bg-slate-900 text-white px-2 py-0.5 rounded">№ 12</span>
+                            </div>
+                            <div class="my-8">
+                                <span class="font-serif italic text-xl block text-slate-700 leading-none">Талын ирээдүй ба</span>
+                                <span class="font-serif text-5xl font-extrabold tracking-tight block text-slate-950 mt-1 mb-4 leading-none">ТЕХНОЛОГИ</span>
+                                <p class="text-xs font-medium text-slate-800 leading-relaxed border-t border-slate-900/10 pt-4">
+                                    Монголын хөдөө орон нутгийн сурагчид нарны эрчим хүч, цахим холболт болон роботын төслийг хэрхэн хөгжүүлж буй тухай.
+                                </p>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div class="text-left">
+                                    <span class="text-[10px] font-bold uppercase text-slate-700 block">Эрхлэн гаргагч</span>
+                                    <span class="font-bold text-sm">Моск медиа бүлгэм</span>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold">
+                                    М
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info & Virtual Article List -->
+                        <div class="space-y-6">
+                            <span class="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 text-xs font-bold px-3 py-1 rounded-full">ОНЦЛОХ ШИНЭ ДУГААР</span>
+                            <h3 class="font-serif text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+                                Дугаар 12: Цахим эриний нүүдэлчид
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Манай 2026 оны зуны дугаар нь 48 хуудастай бөгөөд орон нутгийн сурагчдын боловсрол дахь технологийн нөлөө, шинэ контент бүтээгчдийн ярилцлагуудыг багтаасан.
+                            </p>
+
+                            <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
+                                <h4 class="font-bold text-sm text-slate-900 dark:text-white mb-4">Онцлох гарчигууд:</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex justify-between text-xs items-center border-b border-dashed border-slate-200 dark:border-slate-800 pb-2">
+                                        <span class="text-slate-600 dark:text-slate-300 font-medium">1. Нарны эрчим хүчээр ажилладаг гэр дэх сургалтууд</span>
+                                        <span class="font-bold text-mutedIndigo dark:text-pastelBlue">Хуудас 04</span>
+                                    </li>
+                                    <li class="flex justify-between text-xs items-center border-b border-dashed border-slate-200 dark:border-slate-800 pb-2">
+                                        <span class="text-slate-600 dark:text-slate-300 font-medium">2. Сүхбаатар дүүргийн граффити урлагийн түүх</span>
+                                        <span class="font-bold text-mutedIndigo dark:text-pastelBlue">Хуудас 12</span>
+                                    </li>
+                                    <li class="flex justify-between text-xs items-center border-b border-dashed border-slate-200 dark:border-slate-800 pb-2">
+                                        <span class="text-slate-600 dark:text-slate-300 font-medium">3. Ахлах ангийн сурагчдын сэтгэцийн эрүүл мэнд</span>
+                                        <span class="font-bold text-mutedIndigo dark:text-pastelBlue">Хуудас 20</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex gap-4 pt-4">
+                                <button onclick="openInteractiveReader()" class="hoverable bg-slate-950 text-white dark:bg-slate-50 dark:text-slate-950 px-6 py-3 rounded-xl font-extrabold text-sm hover:shadow-lg transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-book-open"></i> Онлайнаар унших
+                                </button>
+                                <a href="https://placehold.co/600x400" target="_blank" download class="hoverable border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-center flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-file-pdf"></i> PDF татах
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: TEEN VOICES BLOG ================= -->
+        <section id="page-voices" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Blog Header with Filtering & Search -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+                    <div>
+                        <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Өсвөр үеийнхний индэр</span>
+                        <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                            Өсвөр үеийн дуу хоолой блог
+                        </h2>
+                        <p class="text-slate-600 dark:text-slate-300 mt-2 max-w-xl">
+                            Клубийн гишүүдийн болон залуусын өөрсдөө бичсэн судалгаа, гүнзгий нийтлэл, яруу найраг, сурвалжилгуудыг уншаарай.
+                        </p>
+                    </div>
+
+                    <!-- Search Input inside wrapper -->
+                    <div class="relative w-full md:w-80">
+                        <input type="text" id="blog-search" oninput="filterBlogList()" placeholder="Нийтлэл хайх..." class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 text-slate-955 dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo focus:border-transparent transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
+                    </div>
+                </div>
+
+                <!-- Categories filter list -->
+                <div class="flex flex-wrap gap-2 mb-8 border-b border-slate-200 dark:border-slate-800 pb-6">
+                    <button onclick="setBlogCategory('all')" class="blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 transition-colors">Бүх нийтлэл</button>
+                    <button onclick="setBlogCategory('Байгаль орчин')" class="blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Байгаль орчин</button>
+                    <button onclick="setBlogCategory('Соёл урлаг')" class="blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Соёл урлаг</button>
+                    <button onclick="setBlogCategory('Боловсрол')" class="blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Боловсрол</button>
+                    <button onclick="setBlogCategory('Технологи')" class="blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Технологи</button>
+                    <button onclick="setBlogCategory('Эрэн сурвалжлах')" class="blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Эрэн сурвалжлах</button>
+                </div>
+
+                <!-- Blog Feed List Grid -->
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Dynamic Javascript population -->
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 4: EDITORIAL DASHBOARD (WRITE ARTICLE) ================= -->
+        <section id="page-editor" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block mb-2">Үнэний төлөө залуу дуу хоолой</span>
+                    <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                        Редакцийн өрөө & Нийтлэл бүтээх талбар
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 mt-2 max-w-xl mx-auto">
+                        Энд өөрийн сурвалжилсан нийтлэлээ чанартай бичиж, манай хиймэл оюун ухаант зөвлөхөөр хянуулаад, шууд олон нийтэд нийтлээрэй!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Writer Form Area -->
+                    <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-serif text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-pen-fancy text-indigo-500"></i> Нийтлэл төсөллөх
+                            </h3>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="previewDraft()" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors">
+                                    <i class="fa-solid fa-eye mr-1"></i> Харах
+                                </button>
+                                <button type="button" onclick="saveDraftAsPost()" class="px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-colors shadow-md">
+                                    <i class="fa-solid fa-paper-plane mr-1"></i> Нийтлэх
+                                </button>
+                            </div>
+                        </div>
+
+                        <form id="article-draft-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Нийтлэлийн гарчиг</label>
+                                    <input type="text" id="draft-title" required placeholder="Гарчигаа энд оруулна уу..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-750 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Таны нэр (Сэтгүүлч)</label>
+                                    <input type="text" id="draft-author" required placeholder="Сэтгүүлч: Г.Ананд" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-750 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Ангилал</label>
+                                    <select id="draft-category" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-750 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <option value="Байгаль орчин">Байгаль орчин</option>
+                                        <option value="Соёл урлаг">Соёл урлаг</option>
+                                        <option value="Боловсрол">Боловсрол</option>
+                                        <option value="Технологи">Технологи</option>
+                                        <option value="Эрэн сурвалжлах">Эрэн сурвалжлах</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Хавсаргах зураг (Сэдэвтэй холбоотой)</label>
+                                    <select id="draft-image" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-750 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <option value="https://picsum.photos/id/1015/600/400">Байгаль хамгаалал, Хөдөө тал</option>
+                                        <option value="https://picsum.photos/id/1018/600/400">Технологи, Дижитал хот</option>
+                                        <option value="https://picsum.photos/id/1043/600/400">Дуу чимээ, Студи, Соёл</option>
+                                        <option value="https://picsum.photos/id/1062/600/400">Сургалт, Сургуулийн танхим</option>
+                                        <option value="https://picsum.photos/id/1050/600/400">Залуучуудын жагсаал, Чуулган</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Нийтлэлийн товч хураангуй (Хайлт болон кард дээр харагдах 2 өгүүлбэр)</label>
+                                <input type="text" id="draft-snippet" required placeholder="Товч агуулга..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-750 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-xs font-bold uppercase text-slate-400">Нийтлэлийн дэлгэрэнгүй агуулга</label>
+                                    <span class="text-[10px] text-slate-400">Параграфуудыг хоосон мөрөөр тусгаарлаарай.</span>
+                                </div>
+                                <textarea id="draft-body" required rows="12" placeholder="Эрэн сурвалжилж, судалсан баримтаа энд хамгийн дэлгэрэнгүйгээр сэтгүүл зүйн зарчмын дагуу бичнэ үү..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-750 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-sans leading-relaxed"></textarea>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- AI Assistant Sidebar -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-indigo-900 to-indigo-950 text-white rounded-3xl p-6 shadow-xl border border-indigo-800 flex flex-col justify-between min-h-[400px]">
+                            <div>
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center text-white text-xl animate-pulse">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-sm leading-tight text-white">Сэтгүүлчийн AI Зөвлөх</h4>
+                                        <span class="text-[10px] text-indigo-300 font-medium">Gemini 3.1 Flash туслах</span>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-xs text-indigo-200 leading-relaxed mb-4">
+                                    Сэтгүүлч та нийтлэлийнхээ агуулга, найруулгыг сайжруулах, эсвэл Google Search ашиглан бодит баримтыг шалгахыг хүсвэл доорх даалгавруудаас сонгоно уу.
+                                </p>
+
+                                <div class="space-y-2 mb-4" id="ai-quick-tasks">
+                                    <button onclick="runAIAssistant('improve')" class="w-full text-left px-3 py-2 text-xs bg-indigo-800/50 hover:bg-indigo-800 rounded-lg text-indigo-100 transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> Сэтгүүл зүйн найруулга засах
+                                    </button>
+                                    <button onclick="runAIAssistant('factcheck')" class="w-full text-left px-3 py-2 text-xs bg-indigo-800/50 hover:bg-indigo-800 rounded-lg text-indigo-100 transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-magnifying-glass-chart text-sky-300"></i> Агуулгыг Google Search-ээр баримтжуулах
+                                    </button>
+                                    <button onclick="runAIAssistant('ideas')" class="w-full text-left px-3 py-2 text-xs bg-indigo-800/50 hover:bg-indigo-800 rounded-lg text-indigo-100 transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-lightbulb text-yellow-300"></i> Нийтлэлийг хэрхэн нэвтрэч, гүнзгий болгох удирдамж авах
+                                    </button>
+                                </div>
+
+                                <!-- AI Console Log -->
+                                <div id="ai-console-area" class="hidden bg-slate-950/80 rounded-xl p-3 border border-indigo-900/40 text-[11px] font-mono text-indigo-300 max-h-48 overflow-y-auto leading-relaxed">
+                                    <!-- Dynamic response status -->
+                                </div>
+                            </div>
+
+                            <!-- Footer tools within AI -->
+                            <div class="pt-4 border-t border-indigo-800/50">
+                                <span class="text-[9px] text-indigo-400 block mb-1">Гар аргаар AI-аас асуух:</span>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="ai-custom-query" placeholder="Энэ сэдвийг илүү хэрхэн гүнзгийрүүлэх үү?" class="w-full px-2 py-1.5 text-[11px] rounded-lg bg-indigo-800/40 border border-indigo-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 placeholder:text-indigo-400">
+                                    <button onclick="runCustomAIQuery()" class="bg-indigo-500 hover:bg-indigo-600 px-3 rounded-lg text-[11px] font-bold"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Published Notification Toast simulation -->
+                        <div id="publish-toast" class="hidden p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs leading-relaxed shadow-lg">
+                            <h5 class="font-bold text-sm mb-1"><i class="fa-solid fa-circle-check mr-1 animate-bounce"></i> Амжилттай нийтлэгдлээ!</h5>
+                            Таны бичсэн нийтлэл "Өсвөр үеийн блог" хуудсан дээр байршсан тул уншигчид шууд үзэх боломжтой.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 5: GALLERY (With Lightbox) ================= -->
+        <section id="page-gallery" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Бидний түүх гэрэл зурагт</span>
+                    <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                        "Моск" клубийн зургийн цомог
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 mt-2 max-w-xl mx-auto">
+                        Залуу сурвалжлагчдын сургалт, хээрийн судалгаа, хэвлэл мэдээллийн газар дахь аялал зэргийн торгон агшнууд. Зураг дээр дарж томоор үзнэ үү.
+                    </p>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="gallery-grid">
+                    <!-- Image Card 1 -->
+                    <div class="group relative overflow-hidden rounded-2xl shadow-md cursor-pointer aspect-video" onclick="openLightbox('https://picsum.photos/id/101/1200/800', 'Улаанбаатар хотын төв оффист зохиогдсон Сэтгүүл зүйн анхан шатны сургалт')">
+                        <img src="https://picsum.photos/id/101/600/400" alt="Сургалт" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                            <span class="text-xs font-bold text-pastelBlue mb-1 uppercase">Воркшоп</span>
+                            <p class="text-sm text-white font-semibold">Сэтгүүл зүйн анхан шатны сургалт</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 2 -->
+                    <div class="group relative overflow-hidden rounded-2xl shadow-md cursor-pointer aspect-video" onclick="openLightbox('https://picsum.photos/id/1035/1200/800', 'Тэрэлж үндэсний паркад хийсэн экологийн сэтгүүлзүйн аялал')">
+                        <img src="https://picsum.photos/id/1035/600/400" alt="Аялал" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                            <span class="text-xs font-bold text-pastelBlue mb-1 uppercase">Хээрийн сурвалжилга</span>
+                            <p class="text-sm text-white font-semibold">Тэрэлжид хийсэн экологийн практик сургалт</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 3 -->
+                    <div class="group relative overflow-hidden rounded-2xl shadow-md cursor-pointer aspect-video" onclick="openLightbox('https://picsum.photos/id/1041/1200/800', 'Уламжлалт гар урлаачтай хийсэн ярилцлагын бэлтгэл')">
+                        <img src="https://picsum.photos/id/1041/600/400" alt="Ярилцлага" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                            <span class="text-xs font-bold text-pastelBlue mb-1 uppercase">Ярилцлага</span>
+                            <p class="text-sm text-white font-semibold">Гар урлалын уламжлалыг сурвалжлах нь</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 6: ABOUT CLUB ================= -->
+        <section id="page-about" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- History and Mission -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                    <div>
+                        <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Бидний түүх ба Зорилго</span>
+                        <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white leading-tight mb-6">
+                            2021 оноос хойш үнэний дуу хоолойг бэлтгэж байна
+                        </h2>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-4 text-base">
+                            Монголын Өсвөрийн Сэтгүүлчдийн "Моск" клуб нь дунд, ахлах ангийн сурагчдад хараат бус, ёс зүйтэй сэтгүүл зүйн онол, практикийг зааж чиглүүлдэг залуучуудын байгууллага юм.
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6 text-base">
+                            Хуурамч мэдээлэл хурдацтай тархаж буй өнөө үед бид хүүхдүүдийг анхдагч эх сурвалжтай ажиллах, баримтыг нягтлах, судалгаатай бичих зэрэгт сургадаг. Хөдөө орон нутаг болон хотын өсвөр насныхны гүүр болон ажиллаж байна.
+                        </p>
+                    </div>
+                    
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1062/800/600" alt="Манай зөвлөл" class="rounded-3xl shadow-xl w-full">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 7: JOIN US / APPLY ================= -->
+        <section id="page-join" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Дуу хоолойгоо хүргэ. Бидэнтэй нэгд</span>
+                    <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                        "Моск" клубт элсэх
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 mt-2 max-w-lg mx-auto">
+                        Бид бичигч, дизайнер, зурагчин, аудио эх бэлтгэгч сурагчдыг элсүүлнэ. Урьд өмнө нь туршлагагүй байсан ч бид сургаж чиглүүлнэ!
+                    </p>
+                </div>
+
+                <!-- Registration / Interactive Application Form -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-2xl">
+                    <form id="apply-form" onsubmit="handleApplySubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Овог нэр</label>
+                                <input type="text" required id="apply-name" placeholder="Жишээ: Бат-Эрдэнийн Ананд" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Сургууль ба Анги</label>
+                                <input type="text" required id="apply-school" placeholder="Жишээ: 1-р сургууль, 11-р анги" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">И-мэйл хаяг</label>
+                                <input type="email" required id="apply-email" placeholder="anand@example.com" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Ямар чиглэлээр нэгдэх вэ?</label>
+                                <select id="apply-role" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo focus:border-transparent">
+                                    <option value="Writer">Эрэн сурвалжлах бичигч</option>
+                                    <option value="Photographer">Фото сэтгүүлч</option>
+                                    <option value="Designer">Сэтгүүлийн график дизайнер</option>
+                                    <option value="Podcast">Подкаст хөтлөгч / Аудио бэлтгэгч</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Яагаад манай клубт элсэх хүсэлтэй байна вэ? (3-4 өгүүлбэрээр бичнэ үү)</label>
+                            <textarea required id="apply-message" rows="4" placeholder="Өөрийгөө танилцуулж, ямар сэдвийг сурвалжлахыг хүсэж байгаагаа бичээрэй..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo focus:border-transparent"></textarea>
+                        </div>
+
+                        <!-- Toast Response Area -->
+                        <div id="apply-form-status" class="hidden p-4 rounded-xl text-sm font-bold"></div>
+
+                        <div class="text-center pt-2">
+                            <button type="submit" class="hoverable bg-slate-950 dark:bg-white text-slate-50 dark:text-slate-950 font-bold px-8 py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 active:scale-95">
+                                Бүртгүүлэх хүсэлт илгээх
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 8: RESOURCES ================= -->
+        <section id="page-resources" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Сэтгүүлч бэлтгэх гарын авлага</span>
+                    <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                        Үнэгүй сургалтын материалууд
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 mt-2 max-w-xl mx-auto">
+                        Монгол улсын өсвөрийн сэтгүүлчдэд зориулсан ёс зүй, ярилцлага авах болон хэвлэл бэлтгэх арга барилын удирдамжууд.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Resource Block 1 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-pastelBlue/20 text-slate-800 dark:text-white rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-scale-balanced"></i></div>
+                            <h3 class="font-bold text-lg text-slate-950 dark:text-white mb-2">Сэтгүүлчийн ёс зүйн удирдамж</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed mb-4">Эх сурвалжийг хамгаалах, баримт шалгах аргачлал, зохиогчийн эрх болон үнэн зөв мэдээлэл хүргэх үндэс.</p>
+                        </div>
+                        <a href="https://placehold.co/600x400" target="_blank" class="text-xs font-bold text-mutedIndigo dark:text-pastelBlue hover:underline">Татах (PDF) <i class="fa-solid fa-arrow-down-long ml-1"></i></a>
+                    </div>
+                    <!-- Resource Block 2 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-blushPink/20 text-slate-800 dark:text-white rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-microphone"></i></div>
+                            <h3 class="font-bold text-lg text-slate-950 dark:text-white mb-2">Мэргэжлийн Ярилцлага Авах удирдамж</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed mb-4">Асуултыг хэрхэн зөв бэлтгэх, утасны дуу хураагуурыг зөв ашиглах, ярилцагчтай ойлголцох арга техникүүд.</p>
+                        </div>
+                        <a href="https://placehold.co/600x400" target="_blank" class="text-xs font-bold text-mutedIndigo dark:text-pastelBlue hover:underline">Татах (PDF) <i class="fa-solid fa-arrow-down-long ml-1"></i></a>
+                    </div>
+                    <!-- Resource Block 3 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-950/40 text-slate-800 dark:text-white rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-camera"></i></div>
+                            <h3 class="font-bold text-lg text-slate-950 dark:text-white mb-2">Гар утасны фото сэтгүүл зүй</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed mb-4">Гуравны нэгний дүрэм, гэрлийн зохицол, өнгө засалт болон утсаараа сурвалжлагын шилдэг зураг авах зааварчилгаа.</p>
+                        </div>
+                        <a href="https://placehold.co/600x400" target="_blank" class="text-xs font-bold text-mutedIndigo dark:text-pastelBlue hover:underline">Татах (PDF) <i class="fa-solid fa-arrow-down-long ml-1"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 9: PODCASTS ================= -->
+        <section id="page-podcast" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Шууд эфир</span>
+                    <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                        "Моск" аудио ба подкаст суваг
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 mt-2 max-w-xl mx-auto">
+                        Монгол орны өнцөг булан бүрээс бэлтгэсэн, өсвөр насныхны өдөр тутмын амьдрал, үзэл бодлыг хуваалцах аудио нэвтрүүлэг.
+                    </p>
+                </div>
+
+                <!-- Podcast Player Demo UI -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Major Episode Feature Player -->
+                    <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-100 dark:border-slate-800 shadow-xl flex flex-col justify-between">
+                        <div class="flex flex-col md:flex-row gap-6 items-center">
+                            <div class="w-36 h-36 rounded-2xl bg-gradient-to-tr from-pastelBlue to-mutedIndigo flex items-center justify-center text-white text-5xl font-serif font-extrabold shadow-lg">
+                                Моск
+                            </div>
+                            <div class="space-y-2">
+                                <span class="bg-red-100 dark:bg-red-950 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded">ШИНЭ ДУГААР</span>
+                                <h3 class="font-serif text-2xl font-bold text-slate-950 dark:text-white">Дугаар #30: Нүүдэлчний өв соёлыг орчин үеийн кодчиллын экосистемтэй уялдуулах нь</h3>
+                                <p class="text-xs text-slate-500">Үргэлжлэх хугацаа: 42 минут • Хөтлөгч: Б.Номин</p>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Audio element simulation controls -->
+                        <div class="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs text-slate-400" id="current-play-time">0:00</span>
+                                <span class="text-xs text-slate-400">42:15</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden cursor-pointer" onclick="seekPodcast(event)">
+                                <div class="w-1/4 h-full bg-mutedIndigo" id="podcast-progress"></div>
+                            </div>
+                            <div class="flex items-center justify-center gap-6 mt-6">
+                                <button class="text-slate-500 hover:text-slate-900"><i class="fa-solid fa-backward-step text-lg"></i></button>
+                                <button onclick="toggleAudioMock()" id="play-pause-btn" class="w-14 h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full flex items-center justify-center text-xl shadow-md hover:scale-105 active:scale-95 transition-all">
+                                    <i class="fa-solid fa-play" id="audio-icon"></i>
+                                </button>
+                                <button class="text-slate-500 hover:text-slate-900"><i class="fa-solid fa-forward-step text-lg"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Directory list -->
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-sm uppercase text-slate-400 tracking-wider">Өмнөх цувралууд</h4>
+                        
+                        <div class="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 hover:shadow-sm transition-shadow flex items-center gap-4">
+                            <div class="w-10 h-10 rounded bg-pastelBlue/20 text-mutedIndigo flex items-center justify-center"><i class="fa-solid fa-microphone"></i></div>
+                            <div>
+                                <h5 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1">Ep 29: Баян-Өлгийн залуу бүргэдчид</h5>
+                                <p class="text-[10px] text-slate-400">5 сарын 10 • 35 минут</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 hover:shadow-sm transition-shadow flex items-center gap-4">
+                            <div class="w-10 h-10 rounded bg-blushPink/20 text-slate-900 flex items-center justify-center"><i class="fa-solid fa-microphone"></i></div>
+                            <div>
+                                <h5 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1">Ep 28: Сургуулийн хоол ба Шим тэжээл</h5>
+                                <p class="text-[10px] text-slate-400">4 сарын 24 • 28 минут</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 10: FAQ ================= -->
+        <section id="page-faq" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Асуулт ба Хариулт</span>
+                    <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white">
+                        Түгээмэл асуудаг асуултууд
+                    </h2>
+                </div>
+
+                <!-- FAQ Accordion Container -->
+                <div class="space-y-4">
+                    <div class="faq-item bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                        <button onclick="toggleFAQ(0)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors">
+                            <span>"Моск" клубт хэн нэгдэж болох вэ?</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="faq-chevron-0"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5 text-sm text-slate-500 leading-relaxed" id="faq-content-0">
+                            Монгол улсад суралцаж буй 13-аас 19 насны (дунд, ахлах анги) хүссэн сурагч нэгдэх боломжтой. Бид сэтгүүлзүйн ур чадваргүй анхан шатны хүүхдүүдийг ч дуртайяа хүлээн авч чиглүүлдэг.
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                        <button onclick="toggleFAQ(1)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors">
+                            <span>Бүртгэл болон гишүүнчлэлийн төлбөр байгаа юу?</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="faq-chevron-1"></i>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5 text-sm text-slate-500 leading-relaxed" id="faq-content-1">
+                            Үгүй, манай клубийн гишүүнчлэл 100% үнэ төлбөргүй. Клубийн үйл ажиллагаа, хэвлэмэл сэтгүүл тараалт, сургалт воркшопууд нь төрийн бус байгууллагын грант болон олон нийтийн дэмжлэгээр санхүүждэг.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 11: CONTACT & MAP ================= -->
+        <section id="page-contact" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Column 1: Contact Details -->
+                    <div class="space-y-8">
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wider text-mutedIndigo dark:text-pastelBlue block mb-2">Холбоо барих</span>
+                            <h2 class="font-serif text-4xl font-extrabold text-slate-950 dark:text-white leading-tight">
+                                Манай редакцтай холбогдох
+                            </h2>
+                            <p class="text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
+                                Нийтлэлийн сэдэв санал болгох, хамтран ажиллах, эсвэл залуучуудын дуу хоолойг дэмжих хүсэлтэй бол манай Улаанбаатар хот дахь оффисоор зочлоорой.
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-pastelBlue/20 text-mutedIndigo flex items-center justify-center text-xl"><i class="fa-solid fa-map-location-dot"></i></div>
+                                <div>
+                                    <span class="text-xs text-slate-400 font-bold block uppercase">Оффисын хаяг</span>
+                                    <span class="font-bold text-slate-900 dark:text-white">Сүхбаатар дүүрэг, 12-р хороолол, Энхтайвны өргөн чөлөө, 405 тоот</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-blushPink/20 text-slate-900 flex items-center justify-center text-xl"><i class="fa-solid fa-envelope"></i></div>
+                                <div>
+                                    <span class="text-xs text-slate-400 font-bold block uppercase">И-мэйл хаяг</span>
+                                    <span class="font-bold text-slate-900 dark:text-white">editor@moskmedia.org</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Google Maps Embed Representation -->
+                        <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg h-64 relative bg-slate-100">
+                            <iframe 
+                                class="absolute top-0 left-0 w-full h-full"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2673.8053424168014!2d106.91508577694303!3d47.91717466601449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5d9692482329df05%3A0xe5a1b327b876a3b!2sSukhbaatar%20Square!5e0!3m2!1sen!2smn!4v1700000000000" 
+                                width="600" 
+                                height="450" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy">
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Interactive Contact Validation Form -->
+                    <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl">
+                        <h3 class="font-serif text-2xl font-bold text-slate-900 dark:text-white mb-6">Онлайн зурвас илгээх</h3>
+                        
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Таны нэр</label>
+                                <input type="text" required id="contact-name" placeholder="Жишээ: Д.Ананд" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-850 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">И-мэйл хаяг</label>
+                                <input type="email" required id="contact-email" placeholder="anand@example.com" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-850 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Зурвасын сэдэв</label>
+                                <select id="contact-topic" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-850 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo">
+                                    <option value="Scoop">Мэдээлэл өгөх / Шүгэл үлээх</option>
+                                    <option value="Sponsor">Хамтын ажиллагаа / Дэмжлэг</option>
+                                    <option value="Other">Ерөнхий санал хүсэлт</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Агуулга</label>
+                                <textarea required id="contact-message" rows="4" placeholder="Та өөрийн санал хүсэлтээ энд дэлгэрэнгүй бичнэ үү..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-850 text-slate-950 dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-mutedIndigo"></textarea>
+                            </div>
+
+                            <div id="contact-form-status" class="hidden p-4 rounded-xl text-sm font-bold"></div>
+
+                            <button type="submit" class="w-full hoverable bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-bold py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 active:scale-95">
+                                Илгээх
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= FULL VIEW BLOG POST PAGE (DYN) ================= -->
+        <section id="page-blog-post" class="page-view page-hidden py-12 md:py-16">
+            <div class="max-w-3xl mx-auto px-4">
+                <button onclick="navigateTo('voices')" class="hoverable text-sm font-bold text-mutedIndigo dark:text-pastelBlue flex items-center gap-2 mb-8">
+                    <i class="fa-solid fa-arrow-left"></i> Блог руу буцах
+                </button>
+
+                <article class="space-y-6">
+                    <div class="space-y-2">
+                        <span id="post-cat" class="bg-mutedIndigo text-white text-xs font-bold px-3 py-1 rounded-full">Ангилал</span>
+                        <h1 id="post-title" class="font-serif text-3xl md:text-5xl font-extrabold text-slate-950 dark:text-white leading-tight">Нийтлэлийн гарчиг</h1>
+                        <p id="post-meta" class="text-xs text-slate-400">Огноо • Сурвалжлагч</p>
+                    </div>
+
+                    <img id="post-img" src="" alt="Нийтлэлийн зураг" class="w-full h-auto rounded-3xl shadow-lg aspect-video object-cover">
+
+                    <div id="post-content" class="text-slate-600 dark:text-slate-300 leading-relaxed text-base space-y-4">
+                        <!-- Dynamic Text contents populated via routing JS -->
+                    </div>
+                </article>
+            </div>
+        </section>
+
+
+        <!-- ================= INTERNAL MAGAZINE READER MODAL ================= -->
+        <section id="page-reader" class="page-view page-hidden py-12 md:py-16 bg-slate-950 text-white min-h-screen">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="flex justify-between items-center mb-10 border-b border-slate-800 pb-4">
+                    <span class="font-serif italic text-lg text-pastelBlue">"Моск" сэтгүүлийн дижитал уншигч — Дугаар №12</span>
+                    <button onclick="navigateTo('magazine')" class="hoverable bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-700 transition-colors">
+                        <i class="fa-solid fa-xmark mr-1"></i> Хаах
+                    </button>
+                </div>
+
+                <!-- Simulation Flip-book -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8 min-h-[500px] flex flex-col justify-between">
+                    <div id="reader-page-content" class="space-y-6">
+                        <!-- Instantly replaced by page control script -->
+                    </div>
+
+                    <div class="flex justify-between items-center border-t border-slate-800 pt-6 text-slate-400 text-xs">
+                        <button onclick="changeReaderPage(-1)" class="hoverable flex items-center gap-1 hover:text-white transition-colors"><i class="fa-solid fa-chevron-left"></i> Өмнөх</button>
+                        <span id="reader-page-indicator">Хуудас 1 / 3</span>
+                        <button onclick="changeReaderPage(1)" class="hoverable flex items-center gap-1 hover:text-white transition-colors">Дараах <i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-300 dark:bg-slate-950 dark:text-slate-400 border-t border-slate-800 z-10 relative pt-16 pb-8 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pastelBlue to-mutedIndigo flex items-center justify-center text-white font-extrabold text-lg">
+                        М
+                    </div>
+                    <span class="font-serif text-xl font-bold text-white tracking-tight">Моск</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Монголын шинэ, өсвөр үеийнхэнд өөрсдийн түүх, үзэл бодол, үнэнийг нээлттэй хуваалцах боломжийг олгож буй хараат бус хэвлэл мэдээллийн талбар. Үүсгэн байгуулагдсан огноо: 2021 он.
+                </p>
+                <!-- Social media linkages -->
+                <div class="flex items-center gap-3 text-slate-400">
+                    <a href="https://facebook.com" target="_blank" class="hoverable hover:text-white transition-colors text-lg"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://twitter.com" target="_blank" class="hoverable hover:text-white transition-colors text-lg"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="hoverable hover:text-white transition-colors text-lg"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hoverable hover:text-white transition-colors text-lg"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Хуудаснууд</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" onclick="navigateTo('home'); return false;" class="hover:text-white transition-colors">Нүүр хуудас</a></li>
+                    <li><a href="#" onclick="navigateTo('magazine'); return false;" class="hover:text-white transition-colors">Хэвлэмэл сэтгүүл</a></li>
+                    <li><a href="#" onclick="navigateTo('voices'); return false;" class="hover:text-white transition-colors">Залуусын дуу хоолой блог</a></li>
+                    <li><a href="#" onclick="navigateTo('gallery'); return false;" class="hover:text-white transition-colors">Гэрэл зургийн цомог</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Нэмэлт мэдээлэл</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" onclick="navigateTo('about'); return false;" class="hover:text-white transition-colors">Манай зөвлөл</a></li>
+                    <li><a href="#" onclick="navigateTo('join'); return false;" class="hover:text-white transition-colors">Клубт элсэх өргөдөл</a></li>
+                    <li><a href="#" onclick="navigateTo('resources'); return false;" class="hover:text-white transition-colors">Гарын авлага, материалууд</a></li>
+                    <li><a href="#" onclick="navigateTo('faq'); return false;" class="hover:text-white transition-colors">ТАХ / Тусламж</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Мэдээлэл захиалах</h4>
+                <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                    Манай хамгийн шилдэг залуусын сурвалжилгуудыг сар бүр и-мэйлээрээ хүлээн аваарай.
+                </p>
+                <form id="footer-newsletter" onsubmit="handleFooterNewsletter(event)" class="space-y-2">
+                    <input type="email" required placeholder="И-мэйл хаягаа оруулна уу" class="w-full px-3 py-2 bg-slate-800 text-xs border border-slate-700 text-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-pastelBlue">
+                    <button type="submit" class="w-full bg-slate-750 border border-slate-700 text-white text-xs py-2 rounded font-bold hover:bg-slate-700 transition-colors">Бүртгүүлэх</button>
+                </form>
+                <div id="footer-newsletter-status" class="hidden text-[10px] font-bold mt-2"></div>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800 pt-8 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 Монголын Өсвөрийн Сэтгүүлчдийн "Моск" клуб. ТББ. Зохиогчийн эрх хуулиар хамгаалагдсан.</p>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 p-3 rounded-full bg-slate-900 text-white hover:bg-slate-800 shadow-xl border border-slate-800 z-50">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- EXPANDABLE IMAGE LIGHTBOX MODAL -->
+    <div id="lightbox" class="fixed inset-0 bg-slate-950/95 z-50 hidden flex flex-col justify-center items-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-2xl hover:scale-110 transition-transform">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-4xl max-h-[80vh] flex flex-col items-center">
+            <img id="lightbox-img" src="" alt="Томорсон хувилбар" class="max-w-full max-h-[70vh] rounded-xl object-contain shadow-2xl">
+            <p id="lightbox-caption" class="text-slate-300 text-sm mt-4 text-center max-w-xl"></p>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT LOGIC SYSTEM ================= -->
+    <script>
+        /* Multi-page Navigation routing */
+        const pages = ['home', 'magazine', 'voices', 'editor', 'gallery', 'about', 'join', 'resources', 'podcast', 'faq', 'contact', 'blog-post', 'reader'];
+
+        function navigateTo(pageId) {
+            pages.forEach(p => {
+                const element = document.getElementById(`page-${p}`);
+                if (element) {
+                    if (p === pageId) {
+                        element.classList.remove('page-hidden');
+                        element.classList.add('page-visible');
+                    } else {
+                        element.classList.remove('page-visible');
+                        element.classList.add('page-hidden');
+                    }
+                }
+            });
+
+            // Update active states in navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                const linkText = link.textContent.toLowerCase();
+                const pageTextMap = {
+                    home: 'нүүр',
+                    magazine: 'хэвлэмэл сэтгүүл',
+                    voices: 'блог',
+                    editor: 'нийтлэл бичих',
+                    gallery: 'цомог',
+                    about: 'клубийн тухай',
+                    join: 'элсэх',
+                    resources: 'гарын авлага',
+                    podcast: 'подкаст',
+                    faq: 'тах',
+                    contact: 'холбоо барих'
+                };
+                
+                const targetText = pageTextMap[pageId];
+                if (targetText && linkText.includes(targetText)) {
+                    link.classList.add('text-mutedIndigo', 'dark:text-pastelBlue', 'bg-slate-100', 'dark:bg-slate-800');
+                } else {
+                    link.classList.remove('text-mutedIndigo', 'dark:text-pastelBlue', 'bg-slate-100', 'dark:bg-slate-800');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* Responsive Mobile Hamburger Menu */
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.className = 'fa-solid fa-bars text-xl';
+            } else {
+                icon.className = 'fa-solid fa-xmark text-xl';
+            }
+        });
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            mobileMenuBtn.querySelector('i').className = 'fa-solid fa-bars text-xl';
+        }
+
+        /* Dark / Light Mode Toggle with persistence */
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeIcon.className = 'fa-solid fa-sun';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.className = 'fa-solid fa-moon';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeIcon.className = 'fa-solid fa-moon';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun';
+            }
+        });
+
+        /* Back-to-Top Button Trigger Visibility */
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        /* Custom Cursor Follower Position updates */
+        const cursor = document.getElementById('custom-cursor');
+        const cursorRing = document.getElementById('custom-cursor-ring');
+
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            cursorRing.animate({
+                left: e.clientX + 'px',
+                top: e.clientY + 'px'
+            }, { duration: 150, fill: 'forwards' });
+        });
+
+        function initCursorHovers() {
+            const interactives = document.querySelectorAll('a, button, input, select, textarea, .faq-item');
+            interactives.forEach(el => {
+                el.classList.add('hoverable');
+            });
+        }
+
+        /* Lightbox Image Expansion Overlay control */
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        function openLightbox(imgSrc, captionText) {
+            lightboxImg.src = imgSrc;
+            lightboxCaption.textContent = captionText;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.classList.add('lightbox-active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.classList.remove('lightbox-active');
+        }
+
+        /* FAQ Accordion Toggle */
+        function toggleFAQ(idx) {
+            const content = document.getElementById(`faq-content-${idx}`);
+            const chevron = document.getElementById(`faq-chevron-${idx}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        /* Interactive Blog Database (State Management) */
+        const blogPosts = [
+            {
+                id: 'voices-steppe',
+                title: 'Талын цуурай: Хөвсгөлийн залуу малчид уур амьсгалын өөрчлөлтийг хэрхэн даван туулж байна вэ?',
+                category: 'Байгаль орчин',
+                date: '2026 оны 5-р сарын 24',
+                author: 'Дулгүүн Бат-Эрдэнэ',
+                snippet: 'Монгол орны уур амьсгалын өөрчлөлт малчин өрхүүд, ялангуяа малын бэлчээрт хэрхэн нөлөөлж байгааг судалсан сурвалжилга.',
+                image: 'https://picsum.photos/id/1015/600/400',
+                body: `Арбулаг сумын өсвөр насны малчдын хувьд уур амьсгалын өөрчлөлт бол зөвхөн онолын ойлголт биш, өдөр тутам тулгардаг бодит сорилт болоод байна. Зун нь хэт хуурайшиж, өвлийн зудын нөхцөл байдал урьдчилан тааварлахын аргагүй болохын хэрээр залуу үеийнхэн нарны эрчим хүчтэй цаг уурын төхөөрөмж зэрэг орчин үеийн technologies ашиглан мал маллах уламжлалт арга барилаа сайжруулж байна.
+                
+                "Бид нарны эрчим хүчээр ажилладаг чиглүүлэгчээр дамжуулан цаг уур, хур тунадасны хэмжээг тодорхойлдог автомат мэдрэгчийг бэлчээрт суурилуулсан" гэж 16 настай Тэмүүлэн хүү ярилаа. Түүний гэр бүлийнхэн энэхүү ухаалаг аргыг ашиглан бэлчээрээ зөв хуваарилж, нүүдлээ төлөвлөдөг байна.
+                
+                Бид "Моск" клубийнхээ энэхүү сурвалжилгаар дамжуулан монголын бэлчээрийн мал аж ахуйд тулгараад буй бодит асуудлыг шийдвэр гаргагч залуучуудад болон олон улсын байгаль хамгаалагчдад харуулахыг зорилоо.`
+            },
+            {
+                id: 'ub-tech-hubs',
+                title: 'Улаанбаатар 2.0: Хиймэл оюун ухаан ба залуу кодлогчдын шинэ давалгаа',
+                category: 'Технологи',
+                date: '2026 оны 5-р сарын 19',
+                author: 'Цэлмэг Номундари',
+                snippet: 'Сүхбаатар дүүргийн технологийн төвүүдээр зочилж, өсвөр насныхөн монгол хэлний хиймэл оюун ухааны шийдлийг хэрхэн хөгжүүлж буйг сурвалжлав.',
+                image: 'https://picsum.photos/id/1018/600/400',
+                body: `Сүхбаатар дүүрэгт байрлах залуусын технологийн хамтын оффисууд руу орвол ер бусын эрч хүчийг мэдэрнэ. Хичээлийнхээ хажуугаар дунд болон ахлах ангийн сурагчид нэгдэж, монгол хэлний өвөрмөц онцлогт тохирсон цахим хэрэгсэл, аппликейшн хөгжүүлж эхэлжээ.
+                
+                Олон улсын хэлний загварууд нь манай малчдын ахуйн яриа болон орон нутгийн аялгууг тэр бүр таньж чаддаггүй сул талтай. Иймд эдгээр өсвөрийн технологичид монгол хэлний яриаг бичих болон таних хиймэл оюуны загварт өөрсдийн дуу хоолойг бичин оруулж сургаж байна.
+                
+                Энэхүү төсөл нь хөдөөгийн алслагдсан сургуулийн хүүхдүүдэд заавал гар ашиглахгүйгээр сонсож суралцах боломжийг бүрдүүлж, цахим тэгш бус байдлыг арилгах зорилготой юм.`
+            },
+            {
+                id: 'cultural-hiphop',
+                title: 'Гудамжны урлаг, Хөгжмийн хэмнэл ба Хөөмий: UB-ийн шинэ урсгал',
+                category: 'Соёл урлаг',
+                date: '2026 оны 5-р сарын 11',
+                author: 'Тэнгис Эрдэнэт',
+                snippet: 'Гэр хорооллын өсвөр насныхан уламжлалт хөөмийн урлагийг хип-хоп хөгжмийн хэмнэлтэй хэрхэн хослоулж буйг судалсан нь.',
+                image: 'https://picsum.photos/id/1043/600/400',
+                body: `Улаанбаатар хотын гэр хорооллын сурагчдын дунд уламжлалт урлаг болон орчин үеийн гудамжны хөгжим хосолсон сонирхолтой урлагийн шинэ урсгал үүсэж байна. Сүүлийн үед өсвөр насныхан байгаль хамгаалал, нийгмийн тэгш бус байдлын эсрэг дуу хоолойгоо граффити болон уран яруу дуу хөгжмөөр илэрхийлэх болжээ.
+                
+                "Хип-хоп бол бидэнд үнэнийг хэлэх боломжийг олгодог бол хөөмий нь биднийг үндэс язгууртай маань холбодог" гэж 17 настай бүжигчин, дуучин Эрдэнэ ярилаа.
+                
+                Энэхүү соёлын нэгдэл нь залуу үеийнхний дунд асар том давалгааг үүсгээд байгаа бөгөөд "Моск" клуб үүнийг үргэлжлүүлэн сурвалжлан хүргэх болно.`
+            },
+            {
+                id: 'educational-divide',
+                title: 'Хотын утаа ба Хүүхдийн ирээдүй: Гэр хорооллын сургуулиудын тэмцэл',
+                category: 'Эрэн сурвалжлах',
+                date: '2026 оны 5-р сарын 02',
+                author: 'Марал Тамир',
+                snippet: 'Улаанбаатар хотын агаарын чанар гэр хорооллын сургуулийн хүүхдүүдийн ирц болон бие махбодийн хөгжилд хэрхэн нөлөөлдөгийг судалсан гүнзгий сурвалжилга.',
+                image: 'https://picsum.photos/id/1062/600/400',
+                body: `Өвлийн улиралд Улаанбаатар хотын агаарын бохирдол дэлхийн дунджаас хэд дахин давдаг. "Моск" клубийн сурвалжлах баг гэр хорооллын 4 сургуулийн 50 гаруй сурагч болон эмч нартай биечлэн уулзаж ярилцлаа. 
+                
+                Судалгаагаар өвлийн хамгийн хүйтэн 12, 1-р сард уушгины хатгалгаа болон гуурсан хоолойн үрэвсэл зэргээс шалтгаалан сурагчдын ирц дунджаар 30 орчим хувиар буурдаг болохыг тодорхойлов. Түүнчлэн анги танхим доторх агаар шүүгчдийн хангамж муу байгаа нь хичээл дээр хүүхдүүдийн анхаарал төвлөрлийг сааруулдаг байна.
+                
+                Бид энэхүү тайлангаар дамжуулан сургууль бүрт ухаалаг агаар сэлгэлтийн систем суурилуулах шийдлийг боловсруулан нийслэлийн боловсролын газарт зөвлөмж болгон илгээж байна.`
+            }
+        ];
+
+        let selectedBlogCategory = 'all';
+
+        function renderBlogList() {
+            const grid = document.getElementById('blog-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const filtered = blogPosts.filter(post => {
+                const matchesCategory = selectedBlogCategory === 'all' || post.category === selectedBlogCategory;
+                return matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa-regular fa-folder-open text-4xl text-slate-300 dark:text-slate-700 mb-3 block"></i>
+                        <span class="text-slate-500 font-bold">Нийтлэл олдсонгүй.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(post => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-100 dark:border-slate-800 flex flex-col justify-between h-full hover:shadow-xl transition-shadow";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden h-48">
+                            <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover">
+                            <span class="absolute top-4 left-4 bg-mutedIndigo text-white text-xs font-bold px-3 py-1 rounded-full">${post.category}</span>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-slate-400 font-semibold block mb-2">${post.date} • Сурвалжлагч: ${post.author}</span>
+                            <h3 class="font-serif text-xl font-bold mb-3 text-slate-950 dark:text-white leading-snug hover:text-mutedIndigo transition-colors">
+                                ${post.title}
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 line-clamp-3">
+                                ${post.snippet}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <button onclick="viewBlogPost('${post.id}')" class="text-sm font-bold text-mutedIndigo dark:text-pastelBlue flex items-center gap-1.5 hover:gap-2.5 transition-all">
+                            Үргэлжлүүлэн унших <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            initCursorHovers();
+        }
+
+        /* Populate Homepage featured cards dynamically */
+        function renderHomeFeatured() {
+            const container = document.getElementById('home-featured-stories');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Get last 2 articles
+            const items = blogPosts.slice(-2);
+            items.forEach(post => {
+                const div = document.createElement('div');
+                div.className = "bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group flex flex-col h-full";
+                div.innerHTML = `
+                    <div class="relative overflow-hidden h-48">
+                        <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-4 left-4 bg-mutedIndigo text-white text-xs font-bold px-3 py-1 rounded-full">${post.category}</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="text-xs text-slate-400 font-semibold mb-2">${post.date} • Бэлтгэсэн: ${post.author}</span>
+                        <h3 class="font-serif text-xl font-bold mb-3 text-slate-950 dark:text-white leading-snug hover:text-mutedIndigo transition-colors">
+                            ${post.title}
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 flex-grow">
+                            ${post.snippet}
+                        </p>
+                        <a href="#" onclick="viewBlogPost('${post.id}'); return false;" class="hoverable text-sm font-bold text-mutedIndigo dark:text-pastelBlue flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                            Цааш унших <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            initCursorHovers();
+        }
+
+        function setBlogCategory(cat) {
+            selectedBlogCategory = cat;
+            
+            const buttons = document.querySelectorAll('.blog-cat-btn');
+            const catTranslations = {
+                all: 'Бүх нийтлэл',
+                'Байгаль орчин': 'Байгаль орчин',
+                'Соёл урлаг': 'Соёл урлаг',
+                'Боловсрол': 'Боловсрол',
+                'Технологи': 'Технологи',
+                'Эрэн сурвалжлах': 'Эрэн сурвалжлах'
+            };
+            
+            buttons.forEach(btn => {
+                if (btn.textContent.includes(catTranslations[cat]) || (cat === 'all' && btn.textContent.includes('Бүх'))) {
+                    btn.className = "blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 transition-colors";
+                } else {
+                    btn.className = "blog-cat-btn hoverable px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors";
+                }
+            });
+            renderBlogList();
+        }
+
+        function filterBlogList() {
+            const query = document.getElementById('blog-search').value.toLowerCase();
+            const cards = document.querySelectorAll('#blog-grid > div');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const snippet = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(query) || snippet.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        /* Dynamic Blog Post Detail Routing */
+        function viewBlogPost(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+
+            document.getElementById('post-cat').textContent = post.category;
+            document.getElementById('post-title').textContent = post.title;
+            document.getElementById('post-meta').textContent = `${post.date} • Сурвалжлагч: ${post.author}`;
+            document.getElementById('post-img').src = post.image;
+            
+            const paragraphs = post.body.split('\n\n');
+            const contentDiv = document.getElementById('post-content');
+            contentDiv.innerHTML = '';
+            paragraphs.forEach(p => {
+                const para = document.createElement('p');
+                para.className = "mb-4";
+                para.textContent = p;
+                contentDiv.appendChild(para);
+            });
+
+            navigateTo('blog-post');
+        }
+
+        /* E-Reader Interactive Flip simulation */
+        const readerPages = [
+            {
+                title: "Редакторын үг: Хорвоог таних цахим хөтөч",
+                meta: "Бичсэн: Ерөнхий редактор Т.Марал",
+                text: "Мянга мянган жилийн турш нүүдэлчин ахуй нь байгаль цаг уурын эрхшээлд дасан зохицож ирсэн түүх юм. Сүүлийн үед интернэт холболт нэмэгдсэнээр манай хөдөө сумын хүүхдүүд зөвхөн олон нийтийн сүлжээний мэдээлэл хэрэглэгчид биш, харин соёлын өвөө тээж сурталчлах идэвхтэй бүтээгчид болж байна. Бидний хайж буй үнэн бол маш энгийн: технологи нь соёлын өвийг устгах биш, харин хэрхэн улам баяжуулж чадах вэ?"
+            },
+            {
+                title: "Хээрийн сурвалжилга: Нарны эрчим хүчит өрхүүд",
+                meta: "Зураг ба текстийг бэлтгэсэн: Д.Бат-Эрдэнэ",
+                text: "Баруун аймгуудад малчин өрхүүд зөөврийн нарны хавтангуудыг ашиглан хиймэл дагуулын сүлжээг ажиллуулж байна. Ахлах ангийн сурагчид уулын бэлчээр дээрээс сургуулийнхаа цахим хичээлийг хийж байна. Бид Ховд аймгийн малчин өрхтэй хамт хэд хонож, хаврын мал төллөлтийн үеэр интернэт тэдний өдөр тутмын ажилд хэрхэн тусалж буйг судалсан юм."
+            },
+            {
+                title: "Үзэл бодол: Монгол залуучуудын тоглоомын хөгжүүлэлт",
+                meta: "Нийтлэлийг бэлтгэсэн: С.Билгүүн",
+                text: "Улаанбаатар хотын залуу кодлогчдоос бүрдсэн баг Их Монгол улсын үеийг харуулсан шинэ ухаалаг тоглоом бүтээж байна. Түүхийн бодит баримтуудыг орчин үеийн график технологитой холбосноор дэлхийн өнцөг булан бүрт байгаа хүүхдүүдэд манай соёлын өвийг танин мэдэх талбарыг бүрдүүлж буй давуу талтай."
+            }
+        ];
+
+        let currentReaderPageIdx = 0;
+
+        function openInteractiveReader() {
+            currentReaderPageIdx = 0;
+            renderReaderPage();
+            navigateTo('reader');
+        }
+
+        function renderReaderPage() {
+            const content = document.getElementById('reader-page-content');
+            const pageData = readerPages[currentReaderPageIdx];
+            
+            content.innerHTML = `
+                <span class="text-xs font-bold text-pastelBlue uppercase tracking-widest block">Сэтгүүлийн онцлох нийтлэл</span>
+                <h3 class="font-serif text-3xl font-bold">${pageData.title}</h3>
+                <span class="text-xs text-slate-400 block">${pageData.meta}</span>
+                <p class="text-sm text-slate-300 leading-relaxed pt-4">${pageData.text}</p>
+            `;
+
+            document.getElementById('reader-page-indicator').textContent = `Хуудас ${currentReaderPageIdx + 1} / ${readerPages.length}`;
+        }
+
+        function changeReaderPage(dir) {
+            currentReaderPageIdx += dir;
+            if (currentReaderPageIdx < 0) currentReaderPageIdx = 0;
+            if (currentReaderPageIdx >= readerPages.length) currentReaderPageIdx = readerPages.length - 1;
+            renderReaderPage();
+        }
+
+        /* Form Submissions (Interactive validation) with success states */
+        function handleApplySubmit(e) {
+            e.preventDefault();
+            const status = document.getElementById('apply-form-status');
+            const name = document.getElementById('apply-name').value;
+            const role = document.getElementById('apply-role').value;
+
+            const roleTranslations = {
+                Writer: 'Эрэн сурвалжлах бичигч',
+                Photographer: 'Фото сэтгүүлч',
+                Designer: 'График дизайнер',
+                Podcast: 'Подкаст хөтлөгч'
+            };
+
+            status.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'bg-emerald-500/10', 'text-emerald-500');
+            status.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-1"></i> Хүсэлтийг боловсруулж байна...`;
+            status.className = "block bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-300 p-4 rounded-xl text-sm font-bold";
+
+            setTimeout(() => {
+                status.className = "block bg-emerald-500/10 text-emerald-500 p-4 rounded-xl text-sm font-bold";
+                status.innerHTML = `<i class="fa-solid fa-check-double mr-1"></i> Баярлалаа, ${name}! Таны <strong>${roleTranslations[role] || role}</strong> чиглэлээр нэгдэх өргөдлийг хүлээн авлаа. Бид тун удахгүй тантай эргэж холбогдох болно!`;
+                document.getElementById('apply-form').reset();
+            }, 1200);
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const status = document.getElementById('contact-form-status');
+            const name = document.getElementById('contact-name').value;
+
+            status.classList.remove('hidden', 'bg-emerald-500/10', 'text-emerald-500');
+            status.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-1"></i> Зурвасыг илгээж байна...`;
+            status.className = "block bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-300 p-4 rounded-xl text-sm font-bold";
+
+            setTimeout(() => {
+                status.className = "block bg-emerald-500/10 text-emerald-500 p-4 rounded-xl text-sm font-bold";
+                status.innerHTML = `<i class="fa-solid fa-check-double mr-1"></i> Баярлалаа, ${name}! Таны зурвас манай оффист амжилттай хүрлээ. Бид 24 цагийн дотор и-мэйлээр хариу илгээх болно.`;
+                document.getElementById('contact-form').reset();
+            }, 1000);
+        }
+
+        function handleFooterNewsletter(e) {
+            e.preventDefault();
+            const status = document.getElementById('footer-newsletter-status');
+            status.classList.remove('hidden');
+            status.className = "block text-[10px] font-bold mt-2 text-pastelBlue";
+            status.innerHTML = `Бүртгэж байна...`;
+
+            setTimeout(() => {
+                status.className = "block text-[10px] font-bold mt-2 text-emerald-400";
+                status.innerHTML = `Амжилттай бүртгүүллээ. "Моск" клубийн залууст тавтай морил!`;
+                document.getElementById('footer-newsletter').reset();
+            }, 800);
+        }
+
+        /* Mock Podcast Player Progress bar update logic */
+        let podcastTimer = null;
+        let podcastIsPlaying = false;
+        let podcastSecs = 0;
+
+        function toggleAudioMock() {
+            const icon = document.getElementById('audio-icon');
+            const progress = document.getElementById('podcast-progress');
+            const timerText = document.getElementById('current-play-time');
+
+            if (podcastIsPlaying) {
+                clearInterval(podcastTimer);
+                icon.className = 'fa-solid fa-play';
+                podcastIsPlaying = false;
+            } else {
+                podcastIsPlaying = true;
+                icon.className = 'fa-solid fa-pause';
+                
+                podcastTimer = setInterval(() => {
+                    podcastSecs++;
+                    const minutes = Math.floor(podcastSecs / 60);
+                    const seconds = podcastSecs % 60;
+                    timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    
+                    const pct = (podcastSecs / 2535) * 100; // Mock total dur
+                    progress.style.width = `${pct}%`;
+
+                    if (podcastSecs >= 2535) {
+                        clearInterval(podcastTimer);
+                        icon.className = 'fa-solid fa-play';
+                        podcastIsPlaying = false;
+                        podcastSecs = 0;
+                    }
+                }, 1000);
+            }
+        }
+
+        function seekPodcast(e) {
+            const bar = e.currentTarget;
+            const clickX = e.clientX - bar.getBoundingClientRect().left;
+            const width = bar.clientWidth;
+            const pct = clickX / width;
+            
+            document.getElementById('podcast-progress').style.width = `${pct * 100}%`;
+            podcastSecs = Math.floor(pct * 2535);
+            
+            const minutes = Math.floor(podcastSecs / 60);
+            const seconds = podcastSecs % 60;
+            document.getElementById('current-play-time').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        /* Dynamic Writer Dashboard Functions */
+        function previewDraft() {
+            const title = document.getElementById('draft-title').value || "Хоосон гарчиг";
+            const author = document.getElementById('draft-author').value || "Нэргүй сэтгүүлч";
+            const cat = document.getElementById('draft-category').value;
+            const image = document.getElementById('draft-image').value;
+            const snippet = document.getElementById('draft-snippet').value || "Товч агуулга байхгүй байна.";
+            const body = document.getElementById('draft-body').value || "Дэлгэрэнгүй агуулга бичигдээгүй байна.";
+
+            // Show post in full-view dynamic template
+            document.getElementById('post-cat').textContent = cat;
+            document.getElementById('post-title').textContent = title + " (Урьдчилан харах)";
+            document.getElementById('post-meta').textContent = `Өнөөдөр • Сурвалжлагч: ${author}`;
+            document.getElementById('post-img').src = image;
+            
+            const paragraphs = body.split('\n\n');
+            const contentDiv = document.getElementById('post-content');
+            contentDiv.innerHTML = '<div class="bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-200 p-4 rounded-xl text-xs mb-4"><strong>Анхааруулга:</strong> Энэ бол урьдчилан харах горим бөгөөд одоогоор нийтлэгдээгүй байна.</div>';
+            paragraphs.forEach(p => {
+                const para = document.createElement('p');
+                para.className = "mb-4";
+                para.textContent = p;
+                contentDiv.appendChild(para);
+            });
+
+            navigateTo('blog-post');
+        }
+
+        function saveDraftAsPost() {
+            const title = document.getElementById('draft-title').value;
+            const author = document.getElementById('draft-author').value;
+            const cat = document.getElementById('draft-category').value;
+            const image = document.getElementById('draft-image').value;
+            const snippet = document.getElementById('draft-snippet').value;
+            const body = document.getElementById('draft-body').value;
+
+            if(!title || !author || !snippet || !body) {
+                alert("Бүх талбарыг бүрэн бөглөнө үү!");
+                return;
+            }
+
+            const newId = 'voices-user-' + Date.now();
+            const dateStr = new Date().toLocaleDateString('mn-MN', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            const newPost = {
+                id: newId,
+                title: title,
+                category: cat,
+                date: dateStr,
+                author: author,
+                snippet: snippet,
+                image: image,
+                body: body
+            };
+
+            // Insert at the beginning of the posts
+            blogPosts.unshift(newPost);
+            
+            // Re-render blog grid & home featured
+            renderBlogList();
+            renderHomeFeatured();
+
+            // Clear form
+            document.getElementById('article-draft-form').reset();
+
+            // Show success toast
+            const toast = document.getElementById('publish-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 8000);
+
+            // Navigate back to Voices to let them see it
+            navigateTo('voices');
+        }
+
+        /* AI Assistant - Gemini API implementation */
+        async function runAIAssistant(taskType) {
+            const bodyText = document.getElementById('draft-body').value;
+            const titleText = document.getElementById('draft-title').value;
+            const consoleArea = document.getElementById('ai-console-area');
+
+            if(!bodyText && taskType !== 'ideas') {
+                consoleArea.classList.remove('hidden');
+                consoleArea.innerHTML = `<span class="text-red-400">Алдаа: Эхлээд нийтлэлийн дэлгэрэнгүй хэсэгт бага зэрэг текст бичнэ үү.</span>`;
+                return;
+            }
+
+            consoleArea.classList.remove('hidden');
+            consoleArea.innerHTML = `<span class="text-indigo-300 animate-pulse"><i class="fa-solid fa-spinner animate-spin mr-1"></i> Gemini AI агуулгыг боловсруулж байна...</span>`;
+
+            let prompt = "";
+            let useSearch = false;
+
+            if (taskType === 'improve') {
+                prompt = `Дараах Монгол хэлээр бичсэн өсвөр насны сэтгүүлчийн нийтлэлийн найруулга, үг сонголт, цэг таслал болон сэтгүүл зүйн хэв маягийг сайжруулж өгнө үү. Илүү бодитой, мэргэжлийн, объектив бөгөөд уншигчийг татахуйц болгох шаардлагатай. \n\nГарчиг: ${titleText}\n\nНийтлэл:\n${bodyText}`;
+            } else if (taskType === 'factcheck') {
+                useSearch = true;
+                prompt = `Дараах сэдэв болон агуулгатай холбоотой Google Search ашиглан Монгол дахь бодит баримт, статистик мэдээлэл (жишээ нь сүүлийн үеийн судалгаа, тоо баримт) олж өгч, энэхүү нийтлэлийг хэрхэн баримтжуулах тухай зөвлөмж бичиж өгнө үү.\n\nГарчиг: ${titleText}\n\nНийтлэл:\n${bodyText}`;
+            } else if (taskType === 'ideas') {
+                prompt = `Монголын залуучууд, өсвөр насныхны өдөр тутамд тулгардаг ямар байгаль орчин, технологи, соёл болон боловсролын гүнзгий, эрэн сурвалжлах сэдэв байж болох вэ? 3 маш сонирхолтой сэдвийн санаа, тэдгээрийг хэрхэн сурвалжлах удирдамжийн хамт Монголоор бичиж өгнө үү.`;
+            }
+
+            try {
+                const result = await fetchGeminiAI(prompt, useSearch);
+                if (result) {
+                    consoleArea.innerHTML = `
+                        <div class="space-y-2 text-slate-100 font-sans text-xs">
+                            <strong class="text-indigo-400 flex items-center gap-1 border-b border-indigo-900/50 pb-1 mb-1">
+                                <i class="fa-solid fa-circle-check text-emerald-400"></i> AI хариулт бэлэн боллоо:
+                            </strong>
+                            <div class="whitespace-pre-wrap leading-relaxed">${result}</div>
+                        </div>
+                    `;
+                } else {
+                    consoleArea.innerHTML = `<span class="text-red-400">AI хариу ирүүлсэнгүй. Дахин оролдоно уу.</span>`;
+                }
+            } catch (err) {
+                consoleArea.innerHTML = `<span class="text-red-400">Татгалзсан алдаа: Интернэт холболтоо шалгана уу.</span>`;
+            }
+        }
+
+        async function runCustomAIQuery() {
+            const query = document.getElementById('ai-custom-query').value;
+            const consoleArea = document.getElementById('ai-console-area');
+            if(!query) return;
+
+            consoleArea.classList.remove('hidden');
+            consoleArea.innerHTML = `<span class="text-indigo-300 animate-pulse"><i class="fa-solid fa-spinner animate-spin mr-1"></i> Gemini AI хариулт бэлдэж байна...</span>`;
+
+            try {
+                const result = await fetchGeminiAI(query, true);
+                if (result) {
+                    consoleArea.innerHTML = `
+                        <div class="space-y-2 text-slate-100 font-sans text-xs">
+                            <strong class="text-indigo-400 border-b border-indigo-900/50 pb-1 mb-1 block">AI хариулт:</strong>
+                            <div class="whitespace-pre-wrap leading-relaxed">${result}</div>
+                        </div>
+                    `;
+                    document.getElementById('ai-custom-query').value = "";
+                }
+            } catch (err) {
+                consoleArea.innerHTML = `<span class="text-red-400">Алдаа гарлаа.</span>`;
+            }
+        }
+
+        /* Standardized Gemini API Fetch helper */
+        async function fetchGeminiAI(prompt, useSearch) {
+            const apiKey = ""; // Canvas-аар автоматаар удирдуулна
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: {
+                    parts: [{ text: "Та Монголын өсвөрийн сэтгүүлчдийн 'Моск' клубийн ахлах зөвлөх AI туслах байна. Залуу сэтгүүлчдэд нийтлэлээ гүнзгий, сонирхолтой, бодитой, эрэн сурвалжилсан хэлбэртэй болоход тусална уу." }]
+                }
+            };
+
+            if (useSearch) {
+                payload.tools = [{ "google_search": {} }];
+            }
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            const textResult = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            return textResult || null;
+        }
+
+        /* Current Date Time for Top Bar */
+        function updateTime() {
+            const dateEl = document.getElementById('current-date-time');
+            if (dateEl) {
+                const now = new Date();
+                const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                dateEl.innerHTML = `<i class="fa-regular fa-clock mr-1"></i> ${now.toLocaleDateString('mn-MN', options)}`;
+            }
+        }
+
+        /* Initial Setup */
+        window.onload = function() {
+            renderBlogList();
+            renderHomeFeatured();
+            initCursorHovers();
+            updateTime();
+            setInterval(updateTime, 60000);
+        }
+    </script>
+</body>
+</html>
